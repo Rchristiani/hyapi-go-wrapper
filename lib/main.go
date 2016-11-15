@@ -38,6 +38,7 @@ type Job struct {
 
 type Operations struct {
 	Operations []Operation
+	Count int `json:"count"`
 }
 
 type Operation struct {
@@ -47,10 +48,23 @@ type Operation struct {
 	Social Social
 }
 
+type Instructors struct {
+	Instructors []Instructor
+	Count int `json:"count"`
+}
+
+type Instructor struct {
+	Id string `json:"_id"`
+	Name string `json:"name"`
+	Role string `json:"role"`
+	Social Social
+}
+
+
+const apiUrl string = "http://api.hackeryou.com/v1/"
 
 func GetStudents(apiKey string) (Students,error){
 	
-	apiUrl := "http://api.hackeryou.com/v1/"
 
 	studentsCall, err := http.Get(apiUrl + "students/?key=" + apiKey)
 
@@ -73,5 +87,39 @@ func GetStudents(apiKey string) (Students,error){
 }
 
 func GetOperations(apiKey string) (Operations, error) {
+	opsCall, err := http.Get(apiUrl + "operations/?key=" + apiKey)
 
+	defer opsCall.Body.Close()
+
+	dec := json.NewDecoder(opsCall.Body)
+
+	var operations Operations
+
+	for dec.More() {
+		err := dec.Decode(&operations)
+		if err != nil {
+			return operations, err
+		}
+	}
+
+	return operations, err
+}
+
+func GetInstructors(apiKey string) (Instructors, error) {
+	instructorsCall, err := http.Get(apiUrl + "instructors/?key=" + apiKey) 
+
+	defer instructorsCall.Body.Close()
+
+	dec := json.NewDecoder(instructorsCall.Body)
+
+	var instructors Instructors
+
+	for dec.More() {
+		err := dec.Decode(&instructors)
+		if err != nil {
+			return instructors, err
+		}
+	}
+
+	return instructors, err
 }
