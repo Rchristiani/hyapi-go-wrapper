@@ -8,33 +8,33 @@ import (
 
 type Students struct {
 	Students []Student
-	Count int
+	Count int `json:"count"`
 }
 
 type Student struct {
-	_Id string
-	Name string
-	Photo string
-	Location string
+	Id string `json:"_id"`
+	Name string `json:"name"`
+	Photo string `json:"photo"`
+	Location string `json:"location"`
 	Cohort Cohort
 	Social Social
 	Job Job
 }
 
 type Cohort struct {
-	Year string
-	Season string
+	Year int `json:"year"`
+	Season string `json:"season"`
 }
 
 type Social struct {
-	Website string
-	Github string
-	Twitter string
+	Website string `json:"website"`
+	Github string `json:"github"`
+	Twitter string `json:"twitter"`
 }
 
 type Job struct {
-	postion string
-	location string
+	Postion string `json:"position"`
+	Location string	`json:"location"`
 }
 
 func GetStudents(apiKey string) (Students,error){
