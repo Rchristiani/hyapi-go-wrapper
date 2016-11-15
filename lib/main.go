@@ -1,7 +1,6 @@
 package hyapi
 
-import (
-	"fmt"
+import ( 
 	"net/http"
 	"encoding/json"
 )
@@ -37,6 +36,18 @@ type Job struct {
 	Location string	`json:"location"`
 }
 
+type Operations struct {
+	Operations []Operation
+}
+
+type Operation struct {
+	Id string `json:"_id"`
+	Name string `json:"name"`
+	Role string `json:"role"`
+	Social Social
+}
+
+
 func GetStudents(apiKey string) (Students,error){
 	
 	apiUrl := "http://api.hackeryou.com/v1/"
@@ -45,18 +56,22 @@ func GetStudents(apiKey string) (Students,error){
 
 	defer studentsCall.Body.Close()
 
-	students := new(Students)
-
 	dec := json.NewDecoder(studentsCall.Body)
 
+	//create var for items to be in 
+	var student Students
+	//Loop through json stream
 	for dec.More() {
-		var student Students
+		//Decode each
 		err := dec.Decode(&student)
 		if err != nil {
-			fmt.Println(err)
+			return student, err
 		}
-		fmt.Println(student)
 	}
 
-	return *students, err
+	return student, err
+}
+
+func GetOperations(apiKey string) (Operations, error) {
+
 }
